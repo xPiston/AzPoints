@@ -3,6 +3,7 @@ package com.azuriom.azpoints.cmd;
 import com.azuriom.azpoints.Main;
 import com.azuriom.azpoints.utils.MySQL;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 public class AzPoints implements CommandExecutor {
     private static MySQL mysql = new MySQL();
+    private static Main plugin = Main.getInstance();
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.hasPermission("azuriom.azpoints")) {
@@ -33,14 +35,14 @@ public class AzPoints implements CommandExecutor {
                         cible_money = getMoneyPlayer(cible);
                         double new_money = cible_money + Integer.parseInt(args[2]);
                         setPlayerCoins(cible, new_money);
-                        sender.sendMessage("Vous venez d'ajouter " + args[2] + " points a " + cible.getDisplayName());
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-add")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
                         return true;
                     } else {
-                        sender.sendMessage("Le joueur n'est pas inscrit sur le site");
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
                         return false;
                     }
                 } else {
-                    sender.sendMessage("§cVous n'avez pas la permission pour faire ceci.");
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             } else if (args[0].equalsIgnoreCase("take")) {
@@ -52,14 +54,14 @@ public class AzPoints implements CommandExecutor {
                         cible_money = getMoneyPlayer(cible);
                         double new_money = cible_money - Integer.parseInt(args[2]);
                         setPlayerCoins(cible, new_money);
-                        sender.sendMessage("Vous venez de prendre " + args[2] + " points a " + cible.getDisplayName());
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-take")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
                         return true;
                     } else {
-                        sender.sendMessage("Le joueur n'est pas inscrit sur le site");
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
                         return false;
                     }
                 } else {
-                    sender.sendMessage("§cVous n'avez pas la permission pour faire ceci.");
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             } else if (args[0].equalsIgnoreCase("set")) {
@@ -68,17 +70,20 @@ public class AzPoints implements CommandExecutor {
                     String pseudo = getPseudoPlayer(cible);
                     if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
                         setPlayerCoins(cible, Integer.parseInt(args[2]));
-                        sender.sendMessage("Vous venez de définir " + args[2] + " points a " + cible.getDisplayName());
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-set")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
                         return true;
                     } else {
-                        sender.sendMessage("Le joueur n'est pas inscrit sur le site");
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
                         return false;
                     }
                 } else {
-                    sender.sendMessage("§cVous n'avez pas la permission pour faire ceci.");
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             }
+        } else {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
+            return false;
         }
         return false;
     }

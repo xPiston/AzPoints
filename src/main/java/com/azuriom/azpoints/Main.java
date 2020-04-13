@@ -5,12 +5,16 @@ import com.azuriom.azpoints.utils.MySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public class Main extends JavaPlugin {
     public MySQL mysql = new MySQL();
+    private static Main INSTANCE;
 
     @Override
     public void onEnable() {
         super.onEnable();
+        INSTANCE = this;
         getCommand("azpoints").setExecutor(new AzPoints());
         mysql.connect(this.getConfig().getString("Database.HOST"), this.getConfig().getString("Database.PORT"), this.getConfig().getString("Database.DB") + "?autoReconnect=true&useSSL=false", this.getConfig().getString("Database.USER"), this.getConfig().getString("Database.PW"));
         if(mysql.isConnected()){
@@ -22,6 +26,12 @@ public class Main extends JavaPlugin {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             new com.azuriom.azpoints.placeholder.AzPoints().register();
         }
+
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            configFile.getParentFile().mkdirs();
+            saveResource("config.yml", false);
+        }
     }
 
     @Override
@@ -29,4 +39,9 @@ public class Main extends JavaPlugin {
         super.onDisable();
         mysql.disconnect();
     }
+
+    public static Main getInstance() {
+        return INSTANCE;
+    }
+
 }
