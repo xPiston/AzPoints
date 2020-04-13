@@ -1,0 +1,8 @@
+name: AzPoints
+version: 0.0.1
+description: AzPoints
+author: Azuriom
+main: com.azuriom.azpoints.Main
+commands:
+  azpoints:
+    description: azpoints
