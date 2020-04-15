@@ -29,7 +29,7 @@ public class AzPoints implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("add")) {
                 if (sender.hasPermission("azuriom.azpoints.give")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    if (cible != null && cible != sender) {
+                    if (cible != null) {
                         String pseudo = getPseudoPlayer(cible);
                         if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
                             double cible_money = 0;
@@ -52,7 +52,7 @@ public class AzPoints implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("take")) {
                 if (sender.hasPermission("azuriom.azpoints.take")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    if (cible != null && cible != sender) {
+                    if (cible != null) {
                         String pseudo = getPseudoPlayer(cible);
                         if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
                             double cible_money = 0;
@@ -75,7 +75,7 @@ public class AzPoints implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("set")) {
                 if (sender.hasPermission("azuriom.azpoints.set")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    if (cible != null && cible != sender) {
+                    if (cible != null) {
                         String pseudo = getPseudoPlayer(cible);
                         if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
                             setPlayerCoins(cible, Integer.parseInt(args[2]));
