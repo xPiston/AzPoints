@@ -31,15 +31,7 @@ public class MySQL {
     }
 
     public boolean isConnected() {
-        try {
-            if ((conn == null) || (conn.isClosed()) || conn.isValid(5)) {
-                return false;
-            }
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return this.conn != null;
     }
 
     public Connection getConnection() {
