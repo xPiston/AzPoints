@@ -11,3 +11,4 @@ Lang:
   msg-set: "&aVous venez de définir %money% points a %player%."
   no-permision: "&cVous n'avez pas la permission pour faire ceci."
   no-register: "&cLe joueur n'est pas inscrit sur le site"
+  no-co: "&cLe joueur n'est pas connecter sur le serveur"

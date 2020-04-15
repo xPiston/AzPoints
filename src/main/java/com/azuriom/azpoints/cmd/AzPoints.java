@@ -29,117 +29,111 @@ public class AzPoints implements CommandExecutor {
             } else if (args[0].equalsIgnoreCase("add")) {
                 if (sender.hasPermission("azuriom.azpoints.give")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    String pseudo = getPseudoPlayer(cible);
-                    if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
-                        double cible_money = 0;
-                        cible_money = getMoneyPlayer(cible);
-                        double new_money = cible_money + Integer.parseInt(args[2]);
-                        setPlayerCoins(cible, new_money);
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-add")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
-                        return true;
+                    if (cible != null && cible != sender) {
+                        String pseudo = getPseudoPlayer(cible);
+                        if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
+                            double cible_money = 0;
+                            cible_money = getMoneyPlayer(cible);
+                            double new_money = cible_money + Integer.parseInt(args[2]);
+                            setPlayerCoins(cible, new_money);
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-add")).replace("%player%", cible.getDisplayName()).replace("%money%", args[2]));
+                            return true;
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-register")));
+                            return false;
+                        }
                     } else {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
-                        return false;
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-co")));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             } else if (args[0].equalsIgnoreCase("take")) {
                 if (sender.hasPermission("azuriom.azpoints.take")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    String pseudo = getPseudoPlayer(cible);
-                    if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
-                        double cible_money = 0;
-                        cible_money = getMoneyPlayer(cible);
-                        double new_money = cible_money - Integer.parseInt(args[2]);
-                        setPlayerCoins(cible, new_money);
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-take")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
-                        return true;
+                    if (cible != null && cible != sender) {
+                        String pseudo = getPseudoPlayer(cible);
+                        if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
+                            double cible_money = 0;
+                            cible_money = getMoneyPlayer(cible);
+                            double new_money = cible_money - Integer.parseInt(args[2]);
+                            setPlayerCoins(cible, new_money);
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-take")).replace("%player%", cible.getDisplayName()).replace("%money%", args[2]));
+                            return true;
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-register")));
+                            return false;
+                        }
                     } else {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
-                        return false;
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-co")));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             } else if (args[0].equalsIgnoreCase("set")) {
                 if (sender.hasPermission("azuriom.azpoints.set")) {
                     Player cible = Bukkit.getPlayer(args[1]);
-                    String pseudo = getPseudoPlayer(cible);
-                    if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
-                        setPlayerCoins(cible, Integer.parseInt(args[2]));
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-set")).replace("%player%", cible.getDisplayName()).replace("%money%",args[2]));
-                        return true;
+                    if (cible != null && cible != sender) {
+                        String pseudo = getPseudoPlayer(cible);
+                        if (pseudo != null && pseudo.equalsIgnoreCase(args[1])) {
+                            setPlayerCoins(cible, Integer.parseInt(args[2]));
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.msg-set")).replace("%player%", cible.getDisplayName()).replace("%money%", args[2]));
+                            return true;
+                        } else {
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-register")));
+                            return false;
+                        }
                     } else {
-                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-register")));
-                        return false;
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-co")));
                     }
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-permision")));
                     return false;
                 }
             }
         } else {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',plugin.getConfig().getString("Lang.no-permision")));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Lang.no-permision")));
             return false;
         }
         return false;
     }
 
-    public static double getMoneyPlayer(Player player) {
+    public static double getMoneyPlayer(Player uuid) {
         double money;
-        Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
+        money=0;
         try {
-            c = mysql.getConnection();
-            ps = c.prepareStatement("SELECT money FROM user WHERE name = ?");
-            ps.setString(1, player.getDisplayName());
-            rs = ps.executeQuery();
-            if (!rs.next()) {
-                double d = 0.0;
-                return d;
+            PreparedStatement sts = Main.getInstance().mysql.getConnection().prepareStatement("SELECT * FROM users WHERE name = ?");
+            sts.setString(1, uuid.getDisplayName());
+            ResultSet rs = sts.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("money");
             }
-            money = rs.getDouble("money");
-        } catch (SQLException var9) {
-            var9.printStackTrace();
-            double d = 0.0;
-            return d;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return money;
     }
-
     public static void setPlayerCoins(Player player, double money) {
-        Connection c = null;
-        PreparedStatement ps = null;
         try {
-            c = mysql.getConnection();
-            ps = c.prepareStatement("UPDATE user SET money = ? WHERE name = ?");
-
-            ps.setDouble(1, money);
-            ps.setString(2, player.getDisplayName());
-            ps.executeUpdate();
+            PreparedStatement sts = Main.getInstance().mysql.getConnection().prepareStatement("UPDATE users SET money = ? WHERE name = ?");
+            sts.setDouble(1, money);
+            sts.setString(2,player.getDisplayName());
+            sts.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public String getPseudoPlayer(Player player) {
-        Connection c = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
-            c = mysql.getConnection();
-            ps = c.prepareStatement("SELECT name FROM user WHERE name = ?");
-
-            ps.setString(1, player.getDisplayName());
-            rs = ps.executeQuery();
+            PreparedStatement sts = Main.getInstance().mysql.getConnection().prepareStatement("SELECT * FROM users WHERE name=?");
+            sts.setString(1, player.getDisplayName());
+            ResultSet rs = sts.executeQuery();
             if (rs.next()) {
                 return rs.getString("name");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
